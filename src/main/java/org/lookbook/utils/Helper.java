@@ -65,7 +65,7 @@ public class Helper {
         return beans;
     }
 
-    public static <T extends Model> void getCsvFromData(List<T> beans, String path) {
+    public static <T extends Model> boolean getCsvFromData(List<T> beans, String path) {
         try {
             Writer writer = new FileWriter(path, StandardCharsets.UTF_8);
             String[] headerRecord = beans.get(0).getCsvHeader();
@@ -77,14 +77,12 @@ public class Helper {
             for (T model : beans) {
                 csvWriter.writeNext(model.getAllInformation());
             }
-
             csvWriter.close();
             writer.close();
         } catch (IOException e) {
-            System.out.println("An error happened while exporting your file, make sure you don't have a file with the same name opened in another process.");
-            return;
+            return false;
         }
-        System.out.printf("The file has been successfully exported to this path: %s%n", path);
+        return true;
     }
 
     public static <T extends Model> T getModelFromId(List<T> model, int id) {

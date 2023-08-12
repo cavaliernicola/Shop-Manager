@@ -145,7 +145,16 @@ public class Handler {
         Date today = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy");
 
-        new File(dirPath + "/exported-data/").mkdir();
-        Helper.getCsvFromData(model, dirPath + "\\exported-data\\" + filename + "_" + formatter.format(today.getTime()) + ".csv");
+        String exportPath = dirPath + "\\exported-data\\";
+        new File(exportPath).mkdir();
+
+        String completeFileName = filename + "_" + formatter.format(today.getTime()) + ".csv";
+        boolean isExported = Helper.getCsvFromData(model, exportPath + completeFileName);
+        
+        if (!isExported) {
+            System.out.println("An error happened while exporting your file, make sure you don't have a file with the same name opened in another process.");
+        } else {
+            System.out.printf("The file %s has been successfully exported to this path: %s%n", completeFileName, exportPath);
+        }
     }
 }
