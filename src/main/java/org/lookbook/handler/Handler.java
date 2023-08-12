@@ -13,7 +13,9 @@ import org.lookbook.model.Sale;
 import org.lookbook.model.Model;
 import org.lookbook.model.User;
 import org.lookbook.utils.Constants;
-import org.lookbook.utils.Helper;
+import org.lookbook.utils.ModelHelper;
+import org.lookbook.utils.Validator;
+
 import java.util.Map;
 import java.util.Date;
 import java.util.Map.Entry;
@@ -48,24 +50,24 @@ public class Handler {
         System.out.println("You are going to buy new clothes! NOTE: You can always return to the main page by writing \"Q\"");
         System.out.println("Please insert the ID of the user that wants to buy it");
         
-        int userId = Helper.validateId(users);
+        int userId = Validator.validateId(users);
         if (userId < 0) return;
 
         System.out.println("Please insert the ID of the clothing that they want to buy");
-        int clothingId = Helper.validateId(clothes);
+        int clothingId = Validator.validateId(clothes);
         if (clothingId < 0) return;
 
-        Clothing desiredClothes = Helper.getModelFromId(clothes, clothingId);
+        Clothing desiredClothes = ModelHelper.getModelFromId(clothes, clothingId);
         if (!desiredClothes.getAvailability()) {
             System.out.println("Sorry, the clothing you are trying to buy is not available.");
             return;
         }
 
         desiredClothes.setAvailability(false);
-        int saleId = Helper.getMaxInt(sales) + 1; 
+        int saleId = ModelHelper.getModelMaxId(sales) + 1; 
         sales.add(new Sale(saleId, userId, clothingId));
 
-        User buyer = Helper.getModelFromId(users, userId);
+        User buyer = ModelHelper.getModelFromId(users, userId);
         System.out.printf("Congratulations %s %s bought this clothing: %s %s for %s!%n", buyer.getName(), buyer.getSurname(), desiredClothes.getTypology(), desiredClothes.getBrand(), desiredClothes.getFormattedPrice());
      }
 
@@ -73,13 +75,13 @@ public class Handler {
         System.out.println("You are going to return a clothing! NOTE: You can always return to the main page by writing \"Q\"");
         System.out.println("Please insert the ID of the sale of the clothing that you want to return");
 
-        int saleId = Helper.validateId(sales);
+        int saleId = Validator.validateId(sales);
         if (saleId < 0) return;
 
-        Sale desiredSale = Helper.getModelFromId(sales, saleId);
+        Sale desiredSale = ModelHelper.getModelFromId(sales, saleId);
 
         int clothingId = desiredSale.getId();
-        Clothing returnedClothing = Helper.getModelFromId(clothes, clothingId);
+        Clothing returnedClothing = ModelHelper.getModelFromId(clothes, clothingId);
 
         sales.remove(desiredSale);
         returnedClothing.setAvailability(true);
@@ -89,7 +91,7 @@ public class Handler {
     public static void addUser(List<User> users) {
         System.out.println("You are going to add a new user! NOTE: You can always return to the main page by writing \"Q\"");
 
-        int userId = Helper.getMaxInt(users) + 1;
+        int userId = ModelHelper.getModelMaxId(users) + 1;
 
         Map<String, String> texts = new LinkedHashMap<>();
         texts.put("name", "Please insert the name of the user that you want to add.");
@@ -106,7 +108,7 @@ public class Handler {
             if (!element.getKey().equals("date")) {
                 result = Constants.SCANNER.nextLine();
             } else {
-                result = Helper.validateDate();
+                result = Validator.validateDate();
             }
 
             if (result.equalsIgnoreCase("q")) return;
@@ -149,7 +151,7 @@ public class Handler {
         new File(exportPath).mkdir();
 
         String completeFileName = filename + "_" + formatter.format(today.getTime()) + ".csv";
-        boolean isExported = Helper.getCsvFromData(model, exportPath + completeFileName);
+        boolean isExported = ModelHelper.convertModelToCsv(model, exportPath + completeFileName);
         
         if (!isExported) {
             System.out.println("An error happened while exporting your file, make sure you don't have a file with the same name opened in another process.");

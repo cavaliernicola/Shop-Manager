@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Date;
 
 import org.apache.commons.io.input.BOMInputStream;
 import org.lookbook.Main;
@@ -20,31 +16,9 @@ import com.opencsv.CSVWriterBuilder;
 import com.opencsv.ICSVWriter;
 import com.opencsv.bean.CsvToBeanBuilder;
 
-public class Helper {
-    public static <T extends Model> int validateId(List<T> model) {
-        String stringId = Constants.SCANNER.nextLine().trim();
-        int intId;
-        
-        // An id can be only positive, therefore if the user wants to quit, we return a negative one.
-        if (stringId.equalsIgnoreCase("q")) return -1;
-
-        try {
-            intId = Integer.parseInt(stringId);
-        }  catch (NumberFormatException ex) {
-            System.out.println("You must insert a number, not a string, try again.");
-            return validateId(model);
-        } 
-
-        boolean hasId = model.stream().anyMatch(user -> user.getId() == intId);
-        if (hasId) return intId;
-        else {
-            System.out.println("The id you inserted is not in the database, try again.");
-            return validateId(model);
-        }
-    }
-
+public class ModelHelper {
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static <T> List<T> getDataFromCsv(T model, String path) {
+    public static <T> List<T> convertCsvToModel(T model, String path) {
         List<T> beans = null;
         try {               
             BOMInputStream s = BOMInputStream.builder().setInputStream(Main.class.getResourceAsStream("/data/" + path + ".csv")).get();
@@ -65,7 +39,7 @@ public class Helper {
         return beans;
     }
 
-    public static <T extends Model> boolean getCsvFromData(List<T> beans, String path) {
+    public static <T extends Model> boolean convertModelToCsv(List<T> beans, String path) {
         try {
             Writer writer = new FileWriter(path, StandardCharsets.UTF_8);
             String[] headerRecord = beans.get(0).getCsvHeader();
@@ -89,28 +63,7 @@ public class Helper {
        return model.stream().filter(md -> md.getId() == id).findFirst().get();
     }
 
-    public static <T extends Model> int getMaxInt(List<T> model) {
+    public static <T extends Model> int getModelMaxId(List<T> model) {
         return model.stream().max(Comparator.comparingInt(Model::getId)).get().getId();
-    }
-
-    public static String validateDate() {
-        String input = Constants.SCANNER.nextLine().trim();
-        if (input.equalsIgnoreCase("q")) return input;
-
-        try {     
-            DateFormat df = new SimpleDateFormat(Constants.DEFAULT_TIME_PATTERN);
-            Date givenDate = df.parse(input);
-            Date today = new Date();
-
-            if (givenDate.after(today)) {
-                System.out.println("The date can't be in the future.");
-                return validateDate();
-            }
-
-        } catch (NullPointerException | IllegalArgumentException | ParseException e) {
-            System.out.printf("You must insert the date in the format %s%n", Constants.DEFAULT_TIME_PATTERN);
-            return validateDate();
-        }
-        return input;
     }
 }

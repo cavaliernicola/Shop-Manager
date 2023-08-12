@@ -5,14 +5,14 @@ import org.lookbook.model.Clothing;
 import org.lookbook.model.Sale;
 import org.lookbook.model.User;
 import org.lookbook.utils.Constants;
-import org.lookbook.utils.Helper;
+import org.lookbook.utils.ModelHelper;
 
 import java.util.List;
 
 public class Manager {
-    private final List<Clothing> clothes = Helper.getDataFromCsv(new Clothing(), Constants.CLOTHING_PATH);
-    private final List<User> users = Helper.getDataFromCsv(new User(), Constants.USER_PATH);
-    private final List<Sale> sales = Helper.getDataFromCsv(new Sale(), Constants.SALE_PATH);
+    private final List<Clothing> clothes = ModelHelper.convertCsvToModel(new Clothing(), Constants.CLOTHING_PATH);
+    private final List<User> users = ModelHelper.convertCsvToModel(new User(), Constants.USER_PATH);
+    private final List<Sale> sales = ModelHelper.convertCsvToModel(new Sale(), Constants.SALE_PATH);
 
     public void run() {
         String value;
