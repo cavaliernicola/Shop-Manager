@@ -23,7 +23,7 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
 public class Handler {
 
-    public static <T extends Model> void ShowContent(List<T> content) {
+    public static <T extends Model> void showContent(List<T> content) {
         if (content.isEmpty()) {
             System.out.println("There is no content to show.");
             return;
@@ -124,7 +124,7 @@ public class Handler {
         User newUser = new User(userId, results.get("name"), results.get("surname"), birthday, results.get("address"), results.get("documentId"));
         users.add(newUser);
 
-        ShowContent(newUser.toList());
+        showContent(newUser.toList());
         System.out.println("I successfully added the user to my database.");
     }
 

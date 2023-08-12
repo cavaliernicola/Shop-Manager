@@ -43,7 +43,7 @@ The application offers up to 5 main managment features:
 git clone https://github.com/cavaliernicola/Shop-Manager.git
 
 2. Go to the project directory
-Example: cd ~/Desktop/Shop-Manager/
+Example: cd to/path/of/project
 
 3. Build the application 
 mvn package

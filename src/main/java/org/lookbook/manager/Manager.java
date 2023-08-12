@@ -21,7 +21,7 @@ public class Manager {
             value = Constants.SCANNER.nextLine().trim();
 
             switch (value) {
-                case Constants.SHOW_CLOTHES -> Handler.ShowContent(clothes);
+                case Constants.SHOW_CLOTHES -> Handler.showContent(clothes);
                 case Constants.BUY_CLOTHES -> Handler.buyClothes(clothes, users, sales);
                 case Constants.RETURN_CLOTHING -> Handler.returnClothing(clothes, sales);
                 case Constants.ADD_USER -> Handler.addUser(users);
@@ -31,6 +31,7 @@ public class Manager {
                 }
             }
         } while (!value.equals(Constants.EXIT_PROGRAM));
+        Constants.SCANNER.close();
     }
     
     public void printInformation() {
