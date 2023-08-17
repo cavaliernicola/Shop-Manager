@@ -23,6 +23,10 @@ public class Sale implements Model {
     public int getId() {
         return this.saleId;
     }
+
+    public int getClothingId() {
+        return this.clothingId;
+    }
     
     @Override
     public String toString() {
@@ -34,6 +38,6 @@ public class Sale implements Model {
     }
     
     public String[] getCsvHeader() {
-        return new String[]{"ID", "ID Utente", "ID Capo"};
+        return new String[] {"ID", "ID Utente", "ID Capo"};
     } 
 }

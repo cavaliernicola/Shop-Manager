@@ -80,9 +80,9 @@ public class Handler {
 
         Sale desiredSale = ModelHelper.getModelFromId(sales, saleId);
 
-        int clothingId = desiredSale.getId();
+        int clothingId = desiredSale.getClothingId();
         Clothing returnedClothing = ModelHelper.getModelFromId(clothes, clothingId);
-
+        
         sales.remove(desiredSale);
         returnedClothing.setAvailability(true);
         System.out.printf("You successfully returned this clothing: %s %s%n", returnedClothing.getTypology(), returnedClothing.getBrand());
